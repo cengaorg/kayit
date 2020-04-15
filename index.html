@@ -80,31 +80,8 @@
 							<div id="middle-wizard">
 								<div class="submit step">
 									<h3 class="main_question">Lütfen bilgilerinizi giriniz.</h3>
-                  <div id="formcontainer"/>
-                  <div class="form-group">
-										<input type="text" name="firstname" class="form-control required" placeholder="Ad">
-									</div>
-									<div class="form-group">
-										<input type="text" name="lastname" class="form-control required" placeholder="Soyad">
-									</div>
-									<div class="form-group">
-										<input type="text" name="phone" class="form-control required" placeholder="Telefon">
-									</div>
-									<div class="form-group">
-										<input type="email" name="email" class="form-control required" placeholder="E-posta">
-									</div>
-									<div class="form-group">
-										<div class="styled-select clearfix">
-											<select class="wide required" name="category">
-												<option value="">Katılımcı Türü</option>
-                        <option value="akademikpersonel">Akademik Personel</option>
-												<option value="ogrenci">Öğrenci</option>
-												<option value="firmayetkilisi">Firma Yetkilisi</option>
-											</select>
-										</div>
-									</div>
-									<!-- /row -->
-									<div class="form-group terms">
+                  <div id="formcontainer"/></div>
+				  									<div class="form-group terms">
 										<label class="container_check"><a href="#" data-toggle="modal" data-target="#terms-txt">Üyelik Sözleşmesi</a>'ni okudum, onaylıyorum.
 											<input type="checkbox" name="terms" value="Yes" class="required">
 											<span class="checkmark"></span>
@@ -114,6 +91,8 @@
 											<span class="checkmark"></span>
 										</label>
 									</div>
+									<!-- /row -->
+
 								</div>
 								<!-- /step-->
 								<!-- /step-->
@@ -157,6 +136,7 @@
     };
     firebase.initializeApp(firebaseConfig);
     var activeForm = firebase.database().ref('activeForm');
+	var selectArray = [];
     activeForm.on('value', function(form) {
       var formFieldsRef = firebase.database().ref(form.val() + '/formfields');
       formFieldsRef.on('value', function(formFields) {
@@ -166,6 +146,7 @@
                 var formHtml = '<div class="form-group"><input type="text" name="'+childformFields.val().name+'" class="form-control '+childformFields.val().required+'" placeholder="'+childformFields.val().placeholder+'"></div>';
                 break;
               case 'select':
+				selectArray.push(childformFields.val().name);
                 var formHtml = '<div class="form-group"> <div class="styled-select clearfix"> <select class="wide '+childformFields.val().required+'" name="'+childformFields.val().name+'">';
                 formHtml += '<option value="">'+childformFields.val().placeholder+'</option>';
                 childformFields.val().options.forEach(function(option){
@@ -177,9 +158,13 @@
                 // code block
             }
             formcontainer.innerHTML += formHtml;
+			  selectArray.forEach(function(item){
+				$('select[name="'+item+'"]').niceSelect();
+			  });
           });
       });
-      $('#wrapped').niceSelect('update');
+
+      
     });
   </script>
 
