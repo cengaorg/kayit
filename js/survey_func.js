@@ -1,7 +1,7 @@
 	/*  Wizard */
 	jQuery(function ($) {
 		"use strict";
-		$('form#wrapped').attr('action', 'survey.php');
+		// $('form#wrapped').attr('action', 'survey.php');
 		$("#wizard_container").wizard({
 			stepsWrapper: "#wrapped",
 			submit: ".submit",
@@ -46,6 +46,11 @@
 					error.insertAfter(element);
 				}
 			}
+		});
+		
+		$('form#wrapped').on('submit', function (e) {
+			console.log("TEST");
+			e.preventDefault();
 		});
 	});
 
